@@ -8,3 +8,7 @@ Cette equipe contiens -
 2. Ranganath Vaikuntham
 3. Marie Diehl
 
+Nous faisons un projet pour l'ècole Centrale de Lyon
+
+##
+Le jeu 2048
