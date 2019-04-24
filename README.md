@@ -16,8 +16,8 @@ Le jeu 2048
 ### ENGLISH VERSION ###
 
 #Running the game:#
-Open the project file in QT application.
-Run the main.cpp by clicking the green run button.
+1.Open the project file in QT application.
+2.Run the main.cpp by clicking the green run button.
 
 #Dependancies:#
 1. QT Creator software suite
