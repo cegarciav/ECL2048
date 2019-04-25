@@ -13,26 +13,22 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     tile.cpp \
     board.cpp \
     game.cpp \
     qgameboard.cpp \
     qtile.cpp \
     qresetbutton.cpp \
-    observer.cpp \
-    subject.cpp \
-    qgameoverwindow.cpp
+    qgameoverwindow.cpp \
+    qwinwindow.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     tile.h \
     board.h \
     game.h \
     qgameboard.h \
     qtile.h \
     qresetbutton.h \
-    observer.h \
-    subject.h \
     qgameoverwindow.h \
     qwinwindow.h
 

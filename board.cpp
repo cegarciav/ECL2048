@@ -100,6 +100,17 @@ void Board::reset()
 
 }
 
+void Board::notifyObservers()
+{
+    for (QGameBoard* o : observers)
+        o->notify();
+}
+
+void Board::registerObserver(QGameBoard* observer)
+{
+    observers.push_back(observer);
+}
+
 Tile* Board::getTile(int i, int j)
 {
     return board[i][j];
@@ -136,7 +147,12 @@ void Board::move(Direction direction)
     // if the board has changed (and there was no tile collision), place a new tile
     if (changed(pre_move_board) /*&& !tileCollisionLastRound*/) {
         QVector<int> newpos = freePosition();
-        board[newpos[0]][newpos[1]] = new Tile();
+        int n = rand() % 10 + 1;
+        if (n == 1)
+            n = 4;
+        else
+            n = 2;
+        board[newpos[0]][newpos[1]] = new Tile(n);
     }
 
     notifyObservers();

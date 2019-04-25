@@ -1,11 +1,12 @@
 #ifndef QGAMEBOARD_H
 #define QGAMEBOARD_H
 
-#include "observer.h"
 #include "qgameoverwindow.h"
+#include "qwinwindow.h"
 
 #include <QVector>
 #include <QWidget>
+#include <QMainWindow>
 
 class QResetButton;
 class Game;
@@ -15,22 +16,25 @@ class QGridLayout;
 class QVBoxLayout;
 class QLabel;
 
-class QGameBoard : public QWidget, public Observer
+class QGameBoard : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit QGameBoard(QWidget *parent = nullptr);
+    explicit QGameBoard();
     ~QGameBoard();
 
     void notify();
 
 private:
 
+    QWidget* main_widget;
     Game* game;
     // gui representation of board
     QVector<QVector<QTile*> > gui_board;
     // main layout
     QVBoxLayout *mainLayout;
+    //top score widget
+    QLabel *top_score;
     // grid layout of board
     QGridLayout *boardLayout;
     // score widget
@@ -38,7 +42,8 @@ private:
     // game over widget
     QGameOverWindow gameOverWindow;
     // winner widget
-    QLabel *youwin;
+    QWinWindow win_window;
+    bool continuer;
 
     void drawBoard();
 

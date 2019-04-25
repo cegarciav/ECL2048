@@ -9,12 +9,12 @@
 QGameOverWindow::QGameOverWindow(QWidget *parent) :
     QWidget(parent)
 {
-    setStyleSheet("QGameOverWindow { background: rgb(132,209,199); }"); //237,224,200
+    setStyleSheet("QGameOverWindow { background: rgb(132,209,199); }");
     setFixedSize(525,405);
     QVBoxLayout *layout = new QVBoxLayout(this);
     // game over label
     QLabel* gameover = new QLabel("Game Over!", this);
-    gameover->setStyleSheet("QLabel { color: rgb(0,153,153); font: 30pt; font: bold;} "); //119,110,101
+    gameover->setStyleSheet("QLabel { color: rgb(0,153,153); font: 30pt; font: bold;} ");
     // reset button
     reset = new QResetButton(this);
     reset->setFixedHeight(80);

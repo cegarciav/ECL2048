@@ -5,6 +5,7 @@
 #include "tile.h"
 #include "qresetbutton.h"
 
+#include <iostream>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
@@ -12,6 +13,7 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 #include <QString>
+#include <QWidget>
 
 #include <QDebug>
 
@@ -20,15 +22,21 @@ QGameBoard::~QGameBoard()
     delete game;
 }
 
-QGameBoard::QGameBoard(QWidget *parent) :
-    QWidget(parent)
+QGameBoard::QGameBoard() :
+    QMainWindow()
 {
     // set default size
-    resize(760,760);//660);
-
+    resize(760,760);
+    /*parameter for managing the displaying of
+    the winning window after win*/
+    continuer = false;
+    this->setMinimumSize(600, 600);
+    //create the main widget
+    main_widget = new QWidget();
+    setCentralWidget(main_widget);
     // create the main layout
     mainLayout = new QVBoxLayout();
-    setLayout(mainLayout);
+    main_widget->setLayout(mainLayout);
 
     // will be created in drawBoard()
     boardLayout = nullptr;
@@ -46,16 +54,24 @@ QGameBoard::QGameBoard(QWidget *parent) :
             gui_board[i][j] = nullptr;
     drawBoard();
 
+    // create the top score widget and add it to the board
+    top_score = new QLabel(QString("HIGHEST SCORE: %1").arg(game->getHighScore()));
+    top_score->setStyleSheet("QLabel { color: rgb(0,153,153); font: 20pt; }"); //Color Score:
+    top_score->setFixedHeight(50);
+    mainLayout->insertWidget(0, top_score, 0, Qt::AlignLeft);
+
     // create the score widget and add it to the board
     score = new QLabel(QString("SCORE: %1").arg(game->getScore()));
     score->setStyleSheet("QLabel { color: rgb(0,153,153); font: 20pt; }"); //Color Score:
     score->setFixedHeight(50);
-    mainLayout->insertWidget(1, score, 0, Qt::AlignRight);
+    mainLayout->insertWidget(2, score, 0, Qt::AlignRight);
 
     // style sheet of the board
-    setStyleSheet("QGameBoard { background-color: rgb(132,209,199)}");//rgb(187,173,160) }"); //Backgroundcolor
+    setStyleSheet("QGameBoard { background-color: rgb(132,209,199)}"); //Backgroundcolor
 
+    // connect the event of pressing the restart buttons to the fuction/slot resetGame()
     connect(gameOverWindow.getResetBtn(), SIGNAL(clicked()), this, SLOT(resetGame()));
+    connect(win_window.getResetBtn(), SIGNAL(clicked()), this, SLOT(resetGame()));
 }
 
 void QGameBoard::keyPressEvent(QKeyEvent *event)
@@ -79,10 +95,17 @@ void QGameBoard::keyPressEvent(QKeyEvent *event)
 void QGameBoard::notify()
 {
     if (game->isGameOver())
+    {
         gameOverWindow.show();
+        top_score->setText(QString("SCORE: %1").arg(game->getHighScore()));
+    }
 
-    if (game->won())
-        score->setText(QString("Tu as reussi le 2048, félicitacion!\n Tu peux continuer le jeu pour augmenter ta score.\t SCORE: %1").arg(game->getScore()));
+    if (game->won() && !continuer)
+    {
+        win_window.show();
+        continuer = true;
+    }
+
     else
         score->setText(QString("SCORE: %1").arg(game->getScore()));
 
@@ -101,7 +124,7 @@ void QGameBoard::drawBoard()
             gui_board[i][j]->draw();
         }
     }
-    mainLayout->insertLayout(0, boardLayout);
+    mainLayout->insertLayout(1, boardLayout);
 }
 
 
@@ -110,5 +133,8 @@ void QGameBoard::resetGame()
     game->restart();
     drawBoard();
     score->setText(QString("SCORE: %1").arg(game->getScore()));
-    gameOverWindow.hide();
+    if (gameOverWindow.isVisible())
+        gameOverWindow.hide();
+    if (win_window.isVisible())
+        win_window.hide();
 }

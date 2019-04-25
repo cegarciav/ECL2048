@@ -13,7 +13,7 @@ void QTile::draw()
 {
     if (tile == nullptr) {
         setText("");
-        setStyleSheet("QTile { background: rgb(189,220,216); border-radius: 10px; }"); //204,192,179
+        setStyleSheet("QTile { background: rgb(189,220,216); border-radius: 10px; }");
     } else {
         setText(QString::number(tile->getValue()));
         switch (tile->getValue()) {

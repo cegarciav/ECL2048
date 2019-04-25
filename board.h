@@ -1,16 +1,18 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "subject.h"
 
 #include <QVector>
 #include <QString>
+#include <vector>
+#include "qgameboard.h"
+using namespace std;
 
 class Tile;
 
 enum Direction { UP, DOWN, LEFT, RIGHT };
 
-class Board : public Subject
+class Board
 {
 public:
 
@@ -20,6 +22,8 @@ public:
     ~Board();
     // put the board in start state (everything empty except for two 2 tiles)
     void reset();
+    void notifyObservers();
+    void registerObserver(QGameBoard* observer);
     Tile* getTile(int i, int j);
     int getDimension() const { return dimension; }
     void move(Direction direction);
@@ -30,6 +34,7 @@ public:
     bool movePossible() const;
 
 private:
+    vector<QGameBoard*> observers;
     QVector<QVector<Tile*> > board;
     int dimension;
 

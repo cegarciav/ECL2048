@@ -1,9 +1,15 @@
 #include "game.h"
 #include "tile.h"
 
+#include <fstream>
+#include <string>
+
+using namespace std;
+
 Game::Game(int dimension)
 {
     score = 0;
+    readHighScore();
     board = new Board(dimension);
     restart();
 }
@@ -12,6 +18,13 @@ Game::~Game()
 {
     delete board;
 }
+
+
+void Game::registerObserver(QGameBoard* observer)
+{
+    board->registerObserver(observer);
+}
+
 
 void Game::move(Direction dir)
 {
@@ -24,9 +37,12 @@ void Game::move(Direction dir)
 
     // if there is no more move possible, then it's game over
     if (!board->movePossible())
+    {
         gameOver = true;
+        saveHighScore();
+    }
 
-    notifyObservers();
+    board->notifyObservers();
 }
 
 void Game::restart()
@@ -34,6 +50,7 @@ void Game::restart()
     board->reset();
     gameOver = false;
     score = 0;
+    readHighScore();
 }
 
 // alternative (and more efficient implementation):
@@ -47,4 +64,30 @@ bool Game::won() const
                 return true;
 
     return false;
+}
+
+
+void Game::readHighScore()
+{
+    try {
+        string current_score;
+        ifstream doc_topscore("highscore", ios::in);
+        getline(doc_topscore, current_score);
+        highscore = stoi(current_score);
+        doc_topscore.close();
+    } catch (...) {
+        highscore = 0;
+    }
+}
+
+
+void Game::saveHighScore()
+{
+    if (score > highscore)
+    {
+        highscore = score;
+        ofstream doc_topscore("highscore", ios::trunc);
+        doc_topscore << highscore;
+        doc_topscore.close();
+    }
 }
