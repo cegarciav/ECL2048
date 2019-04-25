@@ -80,3 +80,4 @@ Making some improvements in the random tiles, adding a level of complexity.
 We could also add random 4's to spawn with a probability of 10%. (DONE)
 The ability to save games and finish them later.
 Make the movements of the tiles more fluidic. 
+
